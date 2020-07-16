@@ -18,11 +18,13 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+# Void call or help
+
 if [ $help = true ] | [ "$numberOfArguments" = 0 ]; then
     echo "COrGI: Clusters of ORthologous Groups Implementation."
     echo "Describes homology relationships of genes."
     echo
-    echo "Usage: corgi -i input_file -c config_file -o output_file"
+    echo "Usage: corgi -i input_file -c config_file -o output_directory"
     echo
     echo "For more information visit https://github.com/bugds/COrGI"
     exit 1
@@ -34,7 +36,7 @@ if [ $input = false ]; then
     echo "Please, provide path to the input file using -i/--input argument"
     toExit=true
 elif [ ! -d $input ]; then
-    echo "Directory $input does not exist."
+    echo "File $input does not exist."
     toExit=true
 fi
 
@@ -42,24 +44,48 @@ if [ $config = false ]; then
     echo "Please, provide path to the config file using -c/--config argument"
     toExit=true
 elif [ ! -d $config ]; then
-    echo "Directory $config does not exist."
+    echo "File $config does not exist."
     toExit=true
 fi
 
 if [ $output = false ]; then
-    echo "Please, provide path to the output file using -o/--output argument"
+    echo "Please, provide path to the output directory using -o/--output argument"
     toExit=true
 elif [ ! -d $output ]; then
     echo "Directory $output does not exist."
     toExit=true
 fi
 
-# More errors to check - if paths exist etc
+# Check python modules
+
+scriptsDirectory="$(realpath $(dirname $0))"
+
+if [ ! -f "$scriptsDirectory/main.py" ]; then
+    echo "Module "$scriptsDirectory"/main.py does not exist."
+    toExit=true
+fi
+
+if [ ! -f "$scriptsDirectory/blastModule.py" ]; then
+    echo "Module "$scriptsDirectory"/blastModule.py does not exist."
+    toExit=true
+fi
+
+if [ ! -f "$scriptsDirectory/corgiModule.py" ]; then
+    echo "Module "$scriptsDirectory"/corgiModule.py does not exist."
+    toExit=true
+fi
+
+if [ ! -f "$scriptsDirectory/filesModule.py" ]; then
+    echo "Module "$scriptsDirectory"/filesModule.py does not exist."
+    toExit=true
+fi
+
+# Exit on error
 
 if [ $toExit = true ]; then
     exit 1
 fi
 
-# Help
+# Run Corgi
 
 
