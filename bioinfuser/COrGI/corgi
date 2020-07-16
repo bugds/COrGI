@@ -1,0 +1,55 @@
+#!/bin/bash
+
+input=false
+config=false
+output=false
+help=false
+toExit=false
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -i|--input) input="$2"; shift ;;
+        -c|--config) config="$2"; shift ;;
+        -o|--output) output="$2"; shift ;;
+        -h|--help) help=true ;;
+        *) echo "Unknown parameter passed: $1"; toExit=true ;;
+    esac
+    shift
+done
+
+if [ $help = true ] | [ "$#" != 1 ]; then
+    echo "COrGI: Clusters of ORthologous Groups Implementation."
+    echo "Describes homology relationships of genes."
+    echo
+    echo "Usage: corgi -i input_file -c config_file -o output_file"
+    echo
+    echo "For more information visit https://github.com/bugds/COrGI"
+    exit 1
+fi
+
+# Argument errors
+
+if [ $input = false ]; then
+    echo "Please, provide path to the input file using -i/--input argument"
+    toExit=true
+fi
+
+if [ $config = false ]; then
+    echo "Please, provide path to the config file using -c/--config argument"
+    toExit=true
+fi
+
+if [ $output = false ]; then
+    echo "Please, provide path to the output file using -o/--output argument"
+    toExit=true
+fi
+
+# More errors to check - if paths exist etc
+
+if [ $toExit = true ]; then
+    exit 1
+fi
+
+# Help
+
+
