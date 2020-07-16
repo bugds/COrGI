@@ -5,6 +5,7 @@ config=false
 output=false
 help=false
 toExit=false
+numberOfArguments="$#"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -17,7 +18,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-if [ $help = true ] | [ "$#" != 1 ]; then
+if [ $help = true ] | [ "$numberOfArguments" = 0 ]; then
     echo "COrGI: Clusters of ORthologous Groups Implementation."
     echo "Describes homology relationships of genes."
     echo
@@ -32,15 +33,24 @@ fi
 if [ $input = false ]; then
     echo "Please, provide path to the input file using -i/--input argument"
     toExit=true
+elif [ ! -d $input ]; then
+    echo "Directory $input does not exist."
+    toExit=true
 fi
 
 if [ $config = false ]; then
     echo "Please, provide path to the config file using -c/--config argument"
     toExit=true
+elif [ ! -d $config ]; then
+    echo "Directory $config does not exist."
+    toExit=true
 fi
 
 if [ $output = false ]; then
     echo "Please, provide path to the output file using -o/--output argument"
+    toExit=true
+elif [ ! -d $output ]; then
+    echo "Directory $output does not exist."
     toExit=true
 fi
 
